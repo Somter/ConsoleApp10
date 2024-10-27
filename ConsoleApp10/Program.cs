@@ -7,7 +7,7 @@ class MainClass
     {
         try
         {
-            ClassMenu menu = new ClassMenu();
+            ClassMenu menu = new ClassMenu(); 
             menu.Menu();
         }
         catch (Exception ex)
