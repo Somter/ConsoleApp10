@@ -2,13 +2,19 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace ConsoleApp10
 {
-    class Student : Person, IComparable
+    [Serializable]
+    [DataContract]
+    public class Student : Person, IComparable
     {
+        [DataMember]
         public double Average { get; set; } = 0.0;
+        [DataMember]
         public int NumberOfGroup { get; set; } = 0;
+
         public Student() : base() { }
 
         public Student(string name, string surname, int age, string phone, double average, int numberOfGroup)
@@ -33,7 +39,7 @@ namespace ConsoleApp10
             throw new NotImplementedException();
         }
 
-
+        [Serializable]
         // сортировка по возрасту с помощью IComparer (встроенный класс)
         public class SortByAge : IComparer 
         {
@@ -46,6 +52,7 @@ namespace ConsoleApp10
             }
         }
 
+        [Serializable]
         // сортировка по фамилии с помощью IComparer (встроенный класс)
         public class SortBySurname : IComparer
         {

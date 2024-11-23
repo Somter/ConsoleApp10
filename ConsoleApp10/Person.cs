@@ -2,8 +2,9 @@
 
 namespace ConsoleApp10
 {
-    class Person
-    {
+    [Serializable]
+    public class Person
+    {   
         public string Name { get; set; } = "";
         public string Surname { get; set; } = "";
         public string Phone { get; set; } = "";

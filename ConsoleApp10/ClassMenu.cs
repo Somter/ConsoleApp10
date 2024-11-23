@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,7 +25,9 @@ namespace ConsoleApp10
                 Console.WriteLine("5. Сохранить данные");
                 Console.WriteLine("6. Загрузить данные");
                 Console.WriteLine("7. Поиск студента");
-                Console.WriteLine("8. Сортировать студентов"); 
+                Console.WriteLine("8. Сортировать студентов");
+                Console.WriteLine("9. Использовать сериализацию");
+                Console.WriteLine("10.Использовать десериализацию");
                 Console.WriteLine("0. Выход");
                 Console.Write("Ваш выбор: ");
 
@@ -112,7 +115,52 @@ namespace ConsoleApp10
                         int sorting_criterion = int.Parse(Console.ReadLine());
                         academy_Group.Sort(sorting_criterion);
                         break;
-
+                    case "9":
+                        Console.WriteLine("\nВыберите формат для сериализации:");
+                        Console.WriteLine("1. XML");
+                        Console.WriteLine("2. JSON");
+                        Console.WriteLine("3. SOAP");
+                        Console.Write("Ваш выбор: ");
+                        string serializationChoice = Console.ReadLine();
+                        switch (serializationChoice)
+                        {
+                            case "1":
+                                academy_Group.SerializeToXML("data.xml");
+                                break;
+                            case "2":
+                                academy_Group.SerializeToJSON("data.json");
+                                break;
+                            case "3":
+                                academy_Group.SerializeToSOAP("data.soap");
+                                break;
+                            default:
+                                Console.WriteLine("Неверный выбор!");
+                                break;
+                        }
+                        break;
+                    case "10":
+                        Console.WriteLine("\nВыберите формат для десериализации:");
+                        Console.WriteLine("1. XML");
+                        Console.WriteLine("2. JSON");
+                        Console.WriteLine("3. SOAP");
+                        Console.Write("Ваш выбор: ");
+                        string deserializationChoice = Console.ReadLine();
+                        switch (deserializationChoice)
+                        {
+                            case "1":
+                                academy_Group.DeserializeFromXML("data.xml");
+                                break;
+                            case "2":
+                                academy_Group.DeserializeFromJSON("data.json");
+                                break;
+                            case "3":
+                                academy_Group.DeserializeFromSOAP("data.soap");
+                                break;
+                            default:
+                                Console.WriteLine("Неверный выбор!");
+                                break;
+                        }
+                        break;
                     case "0":
                         running = false;
                         break;
@@ -121,7 +169,7 @@ namespace ConsoleApp10
                         Console.WriteLine("Неверный выбор, попробуйте снова.");
                         break;
                 }
-            }
+            }  
         }
     }
 }

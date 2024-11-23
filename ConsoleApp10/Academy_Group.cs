@@ -1,17 +1,20 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Soap;
+using System.Text.Json;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace ConsoleApp10
 {
     class Academy_Group
     {
-        ArrayList students;
+        ArrayList students; 
         int count;
+        FileStream? stream = null;
+        XmlSerializer? serializer = null;
 
         public Academy_Group()
         {
@@ -290,6 +293,147 @@ namespace ConsoleApp10
                 clonedGroup.Add(student); 
             }
             return clonedGroup;
+        }
+
+        // Метод сериализации в XML
+        public void SerializeToXML(string filePath)
+        {
+            try
+            {
+                Student[] studentArray = students.ToArray(typeof(Student)) as Student[];
+
+                XmlSerializer serializer = new XmlSerializer(typeof(Student[]));
+                using (FileStream stream = new FileStream(filePath, FileMode.Create))
+                {
+                    serializer.Serialize(stream, studentArray);
+                }
+                Console.WriteLine("Сериализация успешно выполнена!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Ошибка при сериализации: " + ex.Message);
+            }
+        }
+
+        // Метод десериализации из XML
+        public void DeserializeFromXML(string filePath)
+        {
+            try
+            {
+                if (File.Exists(filePath))
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(Student[]));
+                    using (FileStream stream = new FileStream(filePath, FileMode.Open))
+                    {
+                        Student[] studentArray = (Student[])serializer.Deserialize(stream);
+                        students = new ArrayList(studentArray);
+                        count = students.Count;
+                    }
+                    Console.WriteLine("Десериализация успешно выполнена!");
+                }
+                else
+                {
+                    Console.WriteLine("Файл не найден: " + filePath);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Ошибка при десериализации: " + ex.Message);
+            }
+        }
+
+        // Сериализация в JSON
+        public void SerializeToJSON(string filePath)
+        {
+            try
+            {
+                Student[] studentArray = students.ToArray(typeof(Student)) as Student[];
+
+                string json = JsonSerializer.Serialize(studentArray, new JsonSerializerOptions { WriteIndented = true });
+                File.WriteAllText(filePath, json);
+
+                Console.WriteLine("Сериализация в JSON успешно выполнена!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Ошибка при сериализации в JSON: " + ex.Message);
+            }
+        }
+
+        // Десериализация из JSON
+        public void DeserializeFromJSON(string filePath)
+        {
+            try
+            {
+                if (File.Exists(filePath))
+                {
+                    string json = File.ReadAllText(filePath);
+                    Student[] studentArray = JsonSerializer.Deserialize<Student[]>(json);
+
+                    students = new ArrayList(studentArray); 
+                    count = students.Count;
+
+                    Console.WriteLine("Десериализация из JSON успешно выполнена!");
+                }
+                else
+                {
+                    Console.WriteLine("Файл не найден: " + filePath);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Ошибка при десериализации из JSON: " + ex.Message);
+            }
+        }
+
+        // Сериализация в SOAP
+        public void SerializeToSOAP(string filePath)
+        {
+            try
+            {
+              
+                Student[] studentArray = students.ToArray(typeof(Student)) as Student[];
+
+                SoapFormatter formatter = new SoapFormatter();
+                using (FileStream stream = new FileStream(filePath, FileMode.Create))
+                {
+                    formatter.Serialize(stream, studentArray);
+                }
+
+                Console.WriteLine("Сериализация в SOAP успешно выполнена!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Ошибка при сериализации в SOAP: " + ex.Message);
+            }
+        }
+
+        // Десериализация из SOAP
+        public void DeserializeFromSOAP(string filePath)
+        {
+            try
+            {
+                if (File.Exists(filePath))
+                {
+                    SoapFormatter formatter = new SoapFormatter();
+                    using (FileStream stream = new FileStream(filePath, FileMode.Open))
+                    {
+                        Student[] studentArray = (Student[])formatter.Deserialize(stream);
+                        students = new ArrayList(studentArray);
+                        count = students.Count;
+                    }
+
+                    Console.WriteLine("Десериализация из SOAP успешно выполнена!");
+                }
+                else
+                {
+                    Console.WriteLine("Файл не найден: " + filePath);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Ошибка при десериализации из SOAP: " + ex.Message);
+            }
         }
 
     }
